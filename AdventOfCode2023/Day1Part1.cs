@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 public static class Day1P1
 {
 
-    private static string FindDigit(CharGenerator charGen)
+    private static string FindDigit(ICharGenerator charGen)
     {
         string foundDigit = String.Empty;
         while (charGen.Peek != null)
@@ -30,20 +30,11 @@ public static class Day1P1
             string leftDigit = String.Empty;
             string rightDigit = String.Empty;
 
-            CharGenerator charGen = new CharGenerator(line);
-            leftDigit = FindDigit(charGen);
+            ForwardCharGenerator fcharGen = new ForwardCharGenerator(line);
+            leftDigit = FindDigit(fcharGen);
 
-            CharGenerator charGen
-
-
-            //iterate from right
-            for(int i = lineLength - 1; i >=0; i--){
-                double conversionResult = char.GetNumericValue(line[i]);
-                if (conversionResult > 0){
-                    rightDigit = Char.ToString(line[i]);
-                    break;
-                }
-            }
+            ReverseCharGenerator rCharGen = new ReverseCharGenerator(line);
+            rightDigit = FindDigit(rCharGen);
 
             if (!String.IsNullOrEmpty(leftDigit) && !String.IsNullOrEmpty(rightDigit)){
                 string lineDigit = leftDigit + rightDigit;

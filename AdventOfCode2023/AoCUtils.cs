@@ -1,21 +1,37 @@
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 
-public class CharGenerator
+public interface ICharGenerator
 {
-    private string data;
-    private int index;
-    private int length;
-    private Boolean reverse;
+    public char? Peek();
+    public char Consume();
+}
 
-    public CharGenerator(string data, Boolean reverse = false)
+public abstract class BaseCharGenerator : ICharGenerator
+{
+    protected string data;
+    protected int length;
+
+    public BaseCharGenerator(string data)
     {
         this.data = data;
-        this.reverse = reverse;
         this.length = data.Length;
+    }
+
+    public abstract char? Peek();
+    public abstract char Consume();
+}
+
+public class ForwardCharGenerator : BaseCharGenerator
+{
+    private int index;
+
+    public ForwardCharGenerator(string data) : base(data)
+    {
         this.index = 0;
     }
 
-    public char? Peek()
+    public override char? Peek()
     {
         if(index + 1 < length)
         {
@@ -27,14 +43,36 @@ public class CharGenerator
         }
     }
 
-    public char Consume()
+    public override char Consume()
     {
         return data[index++];
     }
+}
 
-    public void Reset(Boolean reverse = false)
+public class ReverseCharGenerator : BaseCharGenerator
+{
+    
+    private int index;
+
+    public ReverseCharGenerator(string data) : base(data)
     {
-        this.index = 0;
-        this.reverse = reverse;
+        this.index = this.length - 1;
+    }
+
+    public override char? Peek()
+    {
+        if(index - 1 >= 0)
+        {
+            return data[index - 1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public override char Consume()
+    {
+        return data[index--];
     }
 }

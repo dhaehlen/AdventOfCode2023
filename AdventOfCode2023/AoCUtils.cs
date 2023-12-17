@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 public interface ICharGenerator
 {
-    public char? Peek();
+    public char? Peek(int lookAhead = 1);
     public char Consume();
 }
 
@@ -18,7 +18,7 @@ public abstract class BaseCharGenerator : ICharGenerator
         this.length = data.Length;
     }
 
-    public abstract char? Peek();
+    public abstract char? Peek(int lookAhead = 1);
     public abstract char Consume();
 }
 
@@ -31,11 +31,11 @@ public class ForwardCharGenerator : BaseCharGenerator
         this.index = 0;
     }
 
-    public override char? Peek()
+    public override char? Peek(int lookAhead = 1)
     {
-        if(index + 1 < length)
+        if(index + lookAhead < length)
         {
-            return data[index + 1];
+            return data[index + lookAhead];
         }
         else
         {
@@ -59,11 +59,11 @@ public class ReverseCharGenerator : BaseCharGenerator
         this.index = this.length - 1;
     }
 
-    public override char? Peek()
+    public override char? Peek(int lookAhead = 1)
     {
-        if(index - 1 >= 0)
+        if(index - lookAhead >= 0)
         {
-            return data[index - 1];
+            return data[index - lookAhead];
         }
         else
         {

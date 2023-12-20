@@ -1,9 +1,6 @@
-using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
-
 public interface ICharGenerator
 {
-    public char? Peek(int lookAhead = 1);
+    public char? Peek(int lookAhead);
     public char Consume();
 }
 
@@ -18,7 +15,7 @@ public abstract class BaseCharGenerator : ICharGenerator
         this.length = data.Length;
     }
 
-    public abstract char? Peek(int lookAhead = 1);
+    public abstract char? Peek(int lookAhead);
     public abstract char Consume();
 }
 
@@ -31,9 +28,9 @@ public class ForwardCharGenerator : BaseCharGenerator
         this.index = 0;
     }
 
-    public override char? Peek(int lookAhead = 1)
+    public override char? Peek(int lookAhead)
     {
-        if(index + lookAhead < length)
+        if((index + lookAhead) < length)
         {
             return data[index + lookAhead];
         }
@@ -59,9 +56,9 @@ public class ReverseCharGenerator : BaseCharGenerator
         this.index = this.length - 1;
     }
 
-    public override char? Peek(int lookAhead = 1)
+    public override char? Peek(int lookAhead)
     {
-        if(index - lookAhead >= 0)
+        if((index - lookAhead) >= 0)
         {
             return data[index - lookAhead];
         }

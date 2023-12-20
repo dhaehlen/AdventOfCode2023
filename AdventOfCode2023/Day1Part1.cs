@@ -6,7 +6,7 @@ public static class Day1P1
     private static string FindDigit(ICharGenerator charGen)
     {
         string foundDigit = String.Empty;
-        while (charGen.Peek != null)
+        while (charGen.Peek(0) != null)
         {
             char nextChar = charGen.Consume();
             double conversionResult = char.GetNumericValue(nextChar);
@@ -24,9 +24,7 @@ public static class Day1P1
         Boolean failed = false;
 
         foreach (string line in File.ReadLines(filePath))
-        {
-            int lineLength = line.Length;
-            
+        {            
             string leftDigit = String.Empty;
             string rightDigit = String.Empty;
 
@@ -49,7 +47,7 @@ public static class Day1P1
                 }
             }
             else{
-                Console.WriteLine("Error: " + line);
+                Console.WriteLine("Error: " + line + " Left Digit: " + leftDigit + " Right Digit: " + rightDigit);
                 failed = true;
             }  
         }

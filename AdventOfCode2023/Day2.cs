@@ -65,9 +65,32 @@ public static class Day2
     public const int noRedCubes = 12;
     public const int noGreenCubes = 13;
     public const int noBlueCubes = 14;
-  
-    
-    public static void Run()
+
+    public static string[] SplitLine(string line)
+    {
+        return line.Split(new char[]{ ':', ';'});
+    }
+
+    public static List<Game> ParseData()
+    {
+        string filePath = "C:\\Users\\dhaeh\\Documents\\AdventOfCode2023\\AOCinputday2.txt";
+        List<Game> allGames = new List<Game>();
+
+        foreach(string line in File.ReadLines(filePath))
+        {
+                string[] lineSplit = SplitLine(line);
+                string gameNoString = lineSplit[0].Split(' ')[1];
+                gameNoString = gameNoString.Remove(gameNoString.Length);
+
+                int gameNoInt = Int32.Parse(gameNoString);
+
+                allGames.Add(new Game(gameNoInt, lineSplit.Skip(1).Take(lineSplit.Length - 1).ToArray()));
+        }
+
+        return allGames;
+    }
+
+    public static void RunP1()
     {
         List<Game> allGames = new List<Game>();
         allGames = ParseData();
@@ -109,30 +132,44 @@ public static class Day2
         
     }
 
-    public static List<Game> ParseData()
+    public static void RunP2()
     {
-        string filePath = "C:\\Users\\dhaeh\\Documents\\AdventOfCode2023\\AOCinputday2.txt";
         List<Game> allGames = new List<Game>();
+        allGames = ParseData();
+        int gamePowerSum = 0;
 
-        foreach(string line in File.ReadLines(filePath))
+        foreach (Game game in allGames)
         {
-             string[] lineSplit = SplitLine(line);
-             string gameNoString = lineSplit[0].Split(' ')[1];
-             gameNoString = gameNoString.Remove(gameNoString.Length);
+            int maxRedInGame = 0;
+            int maxBlueInGame = 0;
+            int maxGreenInGame = 0;
 
-             int gameNoInt = Int32.Parse(gameNoString);
-
-             allGames.Add(new Game(gameNoInt, lineSplit.Skip(1).Take(lineSplit.Length - 1).ToArray()));
+            Console.WriteLine("For Game " + game.gameNo + "-------------------");
+            int gamePower = 0;
+            foreach(CountColorSet set in game.GetAllCountColorSetsOfGame())
+            {
+                Console.WriteLine(set.color + " " + set.count);
+                switch(set.color)
+                {
+                    case "red":
+                        if(set.count > maxRedInGame){ maxRedInGame = set.count; }
+                        break;
+                    case "green":
+                        if(set.count > maxGreenInGame){ maxGreenInGame = set.count; }
+                        break;
+                    case "blue":
+                        if(set.count > maxBlueInGame){ maxBlueInGame = set.count; }
+                        break;
+                }
+            }
+            gamePower = maxRedInGame * maxBlueInGame * maxGreenInGame;
+            Console.WriteLine("Game " + game.gameNo + " game power = " + gamePower);
+            Console.WriteLine("Max Red Cubes: " + maxRedInGame + " Max Green Cubes: " + maxGreenInGame + " Max Blue Cubes: " + maxBlueInGame);
+            gamePowerSum += gamePower;
         }
 
-        return allGames;
+        Console.WriteLine("Sum of the game powers is: " + gamePowerSum); 
     }
-
-    public static string[] SplitLine(string line)
-    {
-        return line.Split(new char[]{ ':', ';'});
-    }
-
     public static void testSplitLine()
     {
         string testLine = "Game 1: 7 blue, 9 red, 1 green; 8 green; 10 green, 5 blue, 3 red; 11 blue, 5 red, 1 green";

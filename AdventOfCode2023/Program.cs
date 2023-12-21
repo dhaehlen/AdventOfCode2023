@@ -7,7 +7,8 @@ class program {
 
         //--------Day 2----------------
         //Day2.testSplitLine();
-        Day2.Run();
+        //Day2.RunP1();
+        Day2.RunP2();
     }
 }
 
